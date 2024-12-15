@@ -329,7 +329,6 @@ class chatbot:
                 if token_tensor is not None:
                     start_pos += token_tensor.size(0)
 
-
 if __name__ == "__main__":
     model = torch.load("./model.pt", weights_only=False)
     tokenizer = Tokenizer("./tokenizer.model")
