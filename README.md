@@ -19,32 +19,39 @@
 ## ⚙️ Requirements
 
 * **Python:** 3.8+ recommended
-* **Llama 3.2 1B Model Weights:** Download the official Llama 3.2 1B model weights. You may need to request access from Meta via their official channels: [https://llama.meta.com/llama-downloads/](https://llama.meta.com/llama-downloads/) (Follow the instructions on the site).
-* **Llama 3.2 1B Tokenizer:** The tokenizer is typically included with the model download or can be obtained separately. Check the model source or documentation for details.
+* **Llama 3.2 1B Model Weights & Tokenizer:** You need the official Llama 3.2 1B model weights and associated tokenizer files. Request access and download them from Meta's official channels: [https://llama.meta.com/llama-downloads/](https://llama.meta.com/llama-downloads/) (Follow the instructions on the site).
 
-## 🛠️ Installation
+## 🛠️ Setup
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/bok3948/Hi_LLM_Chat.git  # Change YourUsername to your actual GitHub username
+    git clone [https://github.com/bok3948/Hi_LLM_Chat.git](https://github.com/bok3948/Hi_LLM_Chat.git)
     cd Hi_LLM_Chat
     ```
 
-2.  **Install Required Libraries:**
+2.  **Download Model & Tokenizer:**
+    * Obtain the Llama 3.2 1B (Instruct version recommended for chat) model weights and tokenizer from the official Meta channels (see Requirements).
+    * Create a directory within the project to store the model files (e.g., `./llama3.2-1B-instruct/`).
+    * Place all the downloaded model files (e.g., `consolidated.00.pth` or `.safetensors` files, `tokenizer.model`, `params.json`, or the relevant `.gguf` file if using llama.cpp) into the directory you created.
+    * **Important:** You might need to update the model path in the configuration file or script (`config.py`, `chat.py`, etc.) to point to this directory.
+
+3.  **Install Required Libraries:**
     ```bash
-    pip install -r requirements.txt # Ensure you have created this requirements.txt file
+    pip install -r requirements.txt # Ensure you have this requirements.txt file
     ```
-    * Note: If you need GPU support for `llama-cpp-python` or similar libraries, refer to their specific documentation for installation options.
+    * Note: If you need GPU support (e.g., for `llama-cpp-python`), refer to the specific library's documentation for installation options.
 
 ## ▶️ Usage
 
-1.  **(Optional) Configure Model Settings:** Before running, you might need to adjust model configurations (e.g., in `config.py` or the main script). For example, ensure settings like `generate_full_logit` or KV cache are enabled/disabled according to your needs and the library used.
+1.  **(Optional) Configure Model Settings:** Before running, you might need to adjust settings within the script or a configuration file (e.g., `config.py`, `chat.py`). For example, ensure options like `generate_full_logit` or KV cache are set according to your needs and the library used.
 
 2.  **Run the Chatbot:** Open your terminal and execute the main script:
     ```bash
-    python chat.py  # Replace chat.py with the actual name of your execution script if different
+    python chat.py # Or the actual name of your execution script
     ```
-3.  **Interact:** Once the chatbot is running, type your message into the prompt and press Enter.
+
+3.  **Interact:** Once the chatbot starts, type your message into the prompt and press Enter.
+
 4.  **Observe:** Watch as the chatbot's response is generated and displayed in a streaming fashion.
 
 ---
