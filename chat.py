@@ -1,6 +1,13 @@
+import logging
+from typing import  Dict, List, Optional,  Union, Tuple
+from abc import ABC, abstractmethod
+from typing import Callable
 
 import torch
-import logging
+
+from tokenizer import Tokenizer
+
+logger = logging.getLogger(__name__)
 
 class _ChatFormatter(ABC):
 
@@ -77,6 +84,7 @@ class Llama3ChatFormatter(_ChatFormatter):
             tokens.extend(self._encode_header("assistant")) # Pass role directly as a string
         return tokens
 
+
 class chatbot:
     def __init__(self, model,  max_seq_len, tokenizer, chat_format, generate_full_logit, device):
         self.model = model
@@ -91,6 +99,122 @@ class chatbot:
         self.top_k = 0
 
         self.eot_id = self.tokenizer.special_tokens["<|eot_id|>"]
+
+    @torch.no_grad()
+    def generate(
+        self,
+        model,
+        prompt: torch.Tensor,
+        device: torch.device,
+        *,
+        start_pos: int = 0,
+        callback=lambda x: x,
+        ):
+        """
+        Takes a conditioning sequence (prompt) as input and continues to generate as many tokens as requested.
+        """
+        if len(prompt.shape) > 1:
+            prompt = prompt.squeeze(0)
+        prompt_length = prompt.size(0)
+
+        max_new_tokens = self.max_seq_len - start_pos - prompt_length
+
+        input_pos = torch.arange(
+            start_pos, prompt_length + start_pos, device=device, dtype=torch.int
+        )
+
+        next_token = self.prefill(
+            model,
+            prompt.view(1, -1),
+            input_pos,
+        )
+
+        callback(next_token.clone().view(-1))
+
+        input_pos = torch.tensor(
+            [start_pos + prompt_length], device=device, dtype=torch.int
+        )
+
+        generated_tokens = []
+        for generated_token, _ in self.decode_n_tokens(
+            model,
+            next_token,
+            input_pos,
+            max_new_tokens - 1,
+            callback=callback,
+        ):
+            generated_tokens.append(generated_token.view(-1))
+            yield generated_token, None
+
+    def decode_one_token(
+        self,
+        model,
+        x: torch.Tensor,
+        input_pos: torch.Tensor,
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+        assert input_pos.shape[-1] == 1
+        x = x.view(1, -1)
+        logits = model(x, input_pos)
+        if self.generate_full_logit:
+            logits = logits[:, -1, :]
+        return self.sample(logits, self.temperature, self.top_k)
+    
+    def decode_n_tokens(
+        self,
+        model,
+        cur_token: torch.Tensor,
+        input_pos: torch.Tensor,
+        num_new_tokens: int,
+        callback=lambda _: _,
+    ):
+        new_tokens = []
+        encountered_eos = False
+        for _i in range(
+            num_new_tokens - 1
+        ):  # -1 to save space to run an EoS if dont generate it naturally
+            # Actually better for Inductor to codegen attention here
+
+            out_token = cur_token.clone()
+            next_token, next_prob = self.decode_one_token(
+                model,
+                out_token,
+                input_pos,
+            )
+            input_pos += 1
+            new_tokens.append(next_token.clone())
+            callback(new_tokens[-1])
+
+            yield out_token, None
+            cur_token = next_token
+
+            # encountered eos
+            if next_token.item() == self.eot_id:
+                encountered_eos = True
+                final_token, next_prob = self.decode_one_token(
+                    model,
+                    cur_token,
+                    input_pos,
+                )
+                input_pos += 1
+                break
+
+        if not encountered_eos:
+            eos_token = torch.tensor(
+                [self.eot_id],
+                dtype=cur_token.dtype,
+                device=cur_token.device,
+            )
+            new_tokens.append(eos_token.clone())
+            eos_token, next_prob = self.decode_one_token(
+                model,
+                eos_token.view(1, -1),
+                input_pos,
+            )
+            input_pos += 1
+            yield eos_token.clone(), (
+                 None
+            )
+
     def sample(
         self,
         logits,
@@ -104,6 +228,22 @@ class chatbot:
                 idx_next = idx_next.unsqueeze(0)  # shape=(1,)
             return (idx_next, None)
         probs = self.logits_to_probs(logits[0, -1], temperature, top_k)
+
+            
+        return idx_next, probs
+
+    def prefill(
+        self,
+        model,
+        x: torch.Tensor,
+        input_pos: torch.Tensor,
+    ) -> torch.Tensor:
+        logger.debug("x: %s, input_pos: %s", x, input_pos)
+        logits = model(x, input_pos)
+        if self.generate_full_logit:
+            logits = logits[:, -1, :]
+        return self.sample(logits)[0]
+    
     def _callback(self, x, *, buffer, done_generating):
         # TODO: Refactor this callback to only include basic functionality & remove print statements
         #period_id = self.tokenizer.encode(".")[0]
@@ -118,30 +258,75 @@ class chatbot:
         if len(buffer) == 4 or done_generating:
             print("".join(buffer), end="", flush=True)
             buffer.clear()
-    def generate():
-    def decode_one_token(
+
+
+    def chat(
         self,
-        model,
-        x: torch.Tensor,
-        input_pos: torch.Tensor,
-    ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
-        assert input_pos.shape[-1] == 1
-        x = x.view(1, -1)
-        logits = model(x, input_pos)
-        if self.generate_full_logit:
-            logits = logits[:, -1, :]
-        return self.sample(logits, self.temperature, self.top_k)
-    def decode_n_tokens():
-    def prefill(
-        self,
-        model,
-        x: torch.Tensor,
-        input_pos: torch.Tensor,
-    ) -> torch.Tensor:
-        logger.debug("x: %s, input_pos: %s", x, input_pos)
-        logits = model(x, input_pos)
-        if self.generate_full_logit:
-            logits = logits[:, -1, :]
-        return self.sample(logits)[0]
-    def chat():
-        
+    ):
+        print("Starting Interactive Chat")
+
+        start_pos = 0
+        self.system_prompt = None
+
+        print(
+            f"Entering Chat Mode. Will continue chatting back and forth with the language model until the models max context length of {self.max_seq_len} tokens is hit or until the user says /bye"
+        )
+        get_system_prompt = self.get_user_input(
+            "Do you want to enter a system prompt? Enter y for yes and anything else for no. \n"
+        )
+        if get_system_prompt == "y" or get_system_prompt == "Y":
+            self.system_prompt = self.get_user_input("What is your system prompt? \n")
+
+        for i in range(1000):
+            is_first_sample: bool = i == 0
+            print("\n")
+            prompt = self.get_user_input("User: ")
+
+            if prompt == "/bye":
+                print("Exiting Chat.\n")
+                break
+            
+            messages_to_encode = []
+            if is_first_sample and self.system_prompt:
+                messages_to_encode.append(
+                    {"role": "system", "content": self.system_prompt}
+                )
+            messages_to_encode.append({"role": "user", "content": prompt})
+            encoded = self.chat_formatter.encode_dialog_prompt(
+                messages_to_encode, add_generation_prompt=True,
+            )
+            encoded = torch.tensor(
+                encoded, dtype=torch.int, device=self.device
+            )
+
+            if encoded.size(0) + start_pos > self.max_seq_len:
+                print(
+                    "This prompt would take us past the max_seq_length. Ending Conversation."
+                )
+                break
+
+            print("Model: ", end="")
+            buffer = []
+
+            def callback(x, *, done_generating=False):
+                return self._callback(
+                    x,
+                    buffer=buffer,
+                    done_generating=done_generating,
+                )
+
+            generator_func = self.generate(
+                    model = self.model,
+                    prompt=encoded,
+                    device=self.device,
+                    callback=callback,
+                    start_pos=start_pos,
+                )
+
+            start_pos += encoded.size(0)
+
+            for token_tensor, metrics in generator_func:
+                if token_tensor is not None:
+                    start_pos += token_tensor.size(0)
+
+
