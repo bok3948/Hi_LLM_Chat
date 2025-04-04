@@ -47,6 +47,6 @@ class Tokenizer:
             return torch.tensor(tokens, dtype=torch.long).unsqueeze(0)
         return tokens
 
-
-    def decode():
+    def decode(self, tokens):
+        return self.model.decode(tokens)
         
