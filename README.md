@@ -32,7 +32,7 @@ This section covers everything from setting up the environment to running the ch
     ```
 
 2.  **Download Model & Tokenizer:**
-    * Obtain the Llama 3.2 1B (Instruct version recommended for chat) model weights and tokenizer from the official Meta channels (see Requirements).
+    * Obtain the Llama 3.2 1B (Instruct version recommended for chat) model weights and tokenizer from the official Meta channels ([https://llama.meta.com/llama-downloads/](https://llama.meta.com/llama-downloads/)
 
 3.  **Create Directory & Place Model Files:**
     * Create a directory within the cloned repository to store the model files (e.g., create a folder named `llama3.2-1B-instruct`).
