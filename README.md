@@ -43,15 +43,10 @@
 
 ## ▶️ Usage
 
-1.  **(Optional) Configure Model Settings:** Before running, you might need to adjust settings within the script or a configuration file (e.g., `config.py`, `chat.py`). For example, ensure options like `generate_full_logit` or KV cache are set according to your needs and the library used.
+**Run the Chatbot:** Open your terminal and execute the main script:
+```bash
+python chat.py # Or the actual name of your execution script
+```
 
-2.  **Run the Chatbot:** Open your terminal and execute the main script:
-    ```bash
-    python chat.py # Or the actual name of your execution script
-    ```
-
-3.  **Interact:** Once the chatbot starts, type your message into the prompt and press Enter.
-
-4.  **Observe:** Watch as the chatbot's response is generated and displayed in a streaming fashion.
 
 ---
