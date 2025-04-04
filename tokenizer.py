@@ -30,7 +30,22 @@ class Tokenizer:
             special_tokens=self.special_tokens
         )
 
-    def encode():
+    def encode(self, text, bos=False, eos=False, allowed_special=set(), disallowed_special=(), return_tensors="no"):
+        if bos:
+            tokens = [self.special_tokens["<|begin_of_text|>"]]
+        else:
+            tokens = []
+
+        tokens += self.model.encode(text, allowed_special=allowed_special, disallowed_special=disallowed_special)
+
+        if eos:
+            tokens.append(self.special_tokens["<|end_of_text|>"])
+        if return_tensors == "pt":
+            #out = {"input_ids": torch.tensor(tokens, dtype=torch.long).unsqueeze(0)}
+            #namespace = SimpleNamespace(**out)
+            #return namespace
+            return torch.tensor(tokens, dtype=torch.long).unsqueeze(0)
+        return tokens
 
 
     def decode():
