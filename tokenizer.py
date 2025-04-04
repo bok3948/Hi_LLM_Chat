@@ -9,7 +9,27 @@ from types import SimpleNamespace
 
 class Tokenizer:
     def __init__(self, model_path):
-        
+        assert os.path.isfile(model_path), f"Model file {model_path} not found"
+        mergeable_ranks = load_tiktoken_bpe(model_path)
+
+        self.special_tokens = {
+            "<|begin_of_text|>": 128000,
+            "<|end_of_text|>": 128001,
+            "<|start_header_id|>": 128006,
+            "<|end_header_id|>": 128007,
+            "<|eot_id|>": 128009,
+        }
+        self.special_tokens.update({
+            f"<|reserved_{i}|>": 128002 + i for i in range(256) if (128002 + i) not in self.special_tokens.values()
+        })
+
+        self.model = tiktoken.Encoding(
+            name=Path(model_path).name,
+            pat_str=r"(?i:'s|'t|'re|'ve|'m|'ll|'d)|[^\r\n\p{L}\p{N}]?\p{L}+|\p{N}{1,3}| ?[^\s\p{L}\p{N}]+[\r\n]*|\s*[\r\n]+|\s+(?!\S)|\s+",
+            mergeable_ranks=mergeable_ranks,
+            special_tokens=self.special_tokens
+        )
+
     def encode():
 
 
