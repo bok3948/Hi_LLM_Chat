@@ -36,6 +36,18 @@ class chatbot:
             print("".join(buffer), end="", flush=True)
             buffer.clear()
     def generate():
+    def decode_one_token(
+        self,
+        model,
+        x: torch.Tensor,
+        input_pos: torch.Tensor,
+    ) -> Tuple[torch.Tensor, Optional[torch.Tensor]]:
+        assert input_pos.shape[-1] == 1
+        x = x.view(1, -1)
+        logits = model(x, input_pos)
+        if self.generate_full_logit:
+            logits = logits[:, -1, :]
+        return self.sample(logits, self.temperature, self.top_k)
     def decode_n_tokens():
     def prefill(
         self,
