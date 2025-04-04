@@ -14,7 +14,7 @@
 
 ## 🎬 Demo (Optional)
 
-*(Consider embedding or linking to a demo video showcasing the chatbot in action here.)*
+*![Chatbot Demo GIF](./chatbot_demo.gif)*
 
 ## ⚙️ Requirements
 
