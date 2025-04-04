@@ -18,7 +18,7 @@
 
 ## ⚙️ Requirements
 
-* **Python:** 3.8+ recommended
+* **Python:** 3.10+ recommended
 * **Llama 3.2 1B Model Weights & Tokenizer:** You need the official Llama 3.2 1B model weights and associated tokenizer files. Request access and download them from Meta's official channels: [https://llama.meta.com/llama-downloads/](https://llama.meta.com/llama-downloads/) (Follow the instructions on the site).
 
 ## ▶️ Usage
@@ -56,13 +56,13 @@ This section covers everything from setting up the environment to running the ch
         ├── config.py                 <-- Optional configuration file (Example name)
         ├── README.md                 <-- This README file
         └── .git/                     <-- Git directory (hidden by default)
-        ```
-
+    ```
 4.  **Run the Chatbot:**
     * Open your terminal and execute the main script:
     ```bash
     python chat.py # Or the actual name of your execution script
     ```
- fashion.
+    # Example specifying model folder via command-line argument
+    python chat.py --model_folder_path ./llama3.2-1B-instruct/
 
 ---
