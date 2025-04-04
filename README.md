@@ -21,52 +21,48 @@
 * **Python:** 3.8+ recommended
 * **Llama 3.2 1B Model Weights & Tokenizer:** You need the official Llama 3.2 1B model weights and associated tokenizer files. Request access and download them from Meta's official channels: [https://llama.meta.com/llama-downloads/](https://llama.meta.com/llama-downloads/) (Follow the instructions on the site).
 
-## 🛠️ Setup
+## ▶️ Usage
+
+This section covers everything from setting up the environment to running the chatbot.
 
 1.  **Clone the Repository:**
     ```bash
-    git clone https://github.com/bok3948/Hi_LLM_Chat.git
+    git clone [https://github.com/bok3948/Hi_LLM_Chat.git](https://github.com/bok3948/Hi_LLM_Chat.git)
     cd Hi_LLM_Chat
     ```
 
 2.  **Download Model & Tokenizer:**
     * Obtain the Llama 3.2 1B (Instruct version recommended for chat) model weights and tokenizer from the official Meta channels (see Requirements).
 
-Markdown
+3.  **Create Directory & Place Model Files:**
+    * Create a directory within the cloned repository to store the model files (e.g., create a folder named `llama3.2-1B-instruct`).
+    * Place all the downloaded model files (weights, tokenizer, params, etc.) into the directory you just created.
+    * **Example Directory Structure:** After placing the files, your project folder should resemble this:
+        ```
+        Hi_LLM_Chat/
+        │
+        ├── llama3.2-1B-instruct/     <-- Directory for model files
+        │   │
+        │   ├── consolidated.00.pth   <-- Example Llama 3.2 weight file(s)
+        │   ├── (or *.safetensors)    <-- Alternative weight file format
+        │   ├── (or *.gguf)           <-- Example GGUF model file (if using llama.cpp)
+        │   │
+        │   ├── tokenizer.model       <-- Llama 3.2 tokenizer file
+        │   ├── params.json           <-- Model parameters file
+        │   └── ...                   <-- Any other files included with the download
+        │
+        ├── chat.py                   <-- Your main chatbot script (Example name)
+        ├── requirements.txt          <-- List of required Python libraries
+        ├── config.py                 <-- Optional configuration file (Example name)
+        ├── README.md                 <-- This README file
+        └── .git/                     <-- Git directory (hidden by default)
+        ```
 
-## 📂 Expected Directory Structure
-
-After completing the setup steps (cloning the repository, downloading the model, and placing the files), your project directory should look something like this:
-
-    Hi_LLM_Chat/
-    │
-    ├── llama3.2-1B-instruct/     <-- Directory for model files (Created in Setup Step 2)
-    │   │
-    │   ├── consolidated.00.pth   <-- Example Llama 3.2 weight file(s)
-    │   ├── (or *.safetensors)    <-- Alternative weight file format
-    │   ├── (or *.gguf)           <-- Example GGUF model file (if using llama.cpp)
-    │   │
-    │   ├── tokenizer.model       <-- Llama 3.2 tokenizer file
-    │   ├── params.json           <-- Model parameters file
-    │   └── ...                   <-- Any other files included with the download
-    │
-    ├── chat.py                   <-- Your main chatbot script (Example name)
-    ├── requirements.txt          <-- List of required Python libraries
-    ├── config.py                 <-- Optional configuration file (Example name)
-    ├── README.md                 <-- This README file
-
-3.  **Install Required Libraries:**
+4.  **Run the Chatbot:**
+    * Open your terminal and execute the main script:
     ```bash
-    pip install -r requirements.txt # Ensure you have this requirements.txt file
+    python chat.py # Or the actual name of your execution script
     ```
-    * Note: If you need GPU support (e.g., for `llama-cpp-python`), refer to the specific library's documentation for installation options.
-
-## ▶️ Usage
-
-**Run the Chatbot:** Open your terminal and execute the main script:
-```bash
-python chat.py # Or the actual name of your execution script
-```
-
+ fashion.
 
 ---
