@@ -56,7 +56,7 @@ This section covers everything from setting up the environment to running the ch
         ├── config.py                 <-- Optional configuration file (Example name)
         ├── README.md                 <-- This README file
         └── .git/                     <-- Git directory (hidden by default)
-    ```
+
 4.  **Run the Chatbot:**
     * Open your terminal and execute the main script:
     ```bash
