@@ -60,11 +60,11 @@ This section covers everything from setting up the environment to running the ch
 4.  **Run the Chatbot:**
     * Open your terminal and execute the main script:
     ```bash
-    python chat.py
+    python main.py
     ```
     * Example specifying model folder via command-line argument
     ```bash
-    python chat.py --model_folder_path ./llama3.2-1B-instruct/
+    python main.py --model_folder_path ./llama3.2-1B-instruct/
     ```
 
 ---
