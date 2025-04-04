@@ -7,6 +7,20 @@ class chatbot:
         self.model = model
         self.tokenizer = tokenizer
         self.device = device
+
+    def sample(
+        self,
+        logits,
+        temperature: float = 0,
+        top_k: Optional[int] = None,
+    ):
+        if temperature == 0:
+            
+            _, idx_next = torch.topk(logits, k=1, dim=-1)
+            if idx_next.dim() == 0:
+                idx_next = idx_next.unsqueeze(0)  # shape=(1,)
+            return (idx_next, None)
+        probs = self.logits_to_probs(logits[0, -1], temperature, top_k)
     def generate():
     def decode_n_tokens():
     def prefill(
