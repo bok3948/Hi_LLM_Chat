@@ -64,7 +64,7 @@ This section covers everything from setting up the environment to running the ch
     ```
     * Example specifying model folder via command-line argument
     ```bash
-    python main.py --model_folder_path ./llama3.2-1B-instruct/
+    python main.py --model_folder_path ./llama3.2-1B-instruct
     ```
 
 ---
