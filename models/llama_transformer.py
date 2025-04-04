@@ -614,6 +614,6 @@ def get_llama_3_2_instruct_1B(folder_path, use_kv_cache=True, enable_dynamic_sha
 
     checkpoint = torch.load(checkpoint_path)
     msg = model.load_state_dict(state_dict=checkpoint, strict=False)
-    print(msg)
+    #print(msg)
 
     return model
