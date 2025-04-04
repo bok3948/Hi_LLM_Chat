@@ -27,7 +27,7 @@ This section covers everything from setting up the environment to running the ch
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/bok3948/Hi_LLM_Chat.git](https://github.com/bok3948/Hi_LLM_Chat.git)
+    git clone https://github.com/bok3948/Hi_LLM_Chat.git
     cd Hi_LLM_Chat
     ```
 
