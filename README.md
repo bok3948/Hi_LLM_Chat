@@ -12,7 +12,7 @@
 * **💨 Real-time Streaming Output:** Responses appear token-by-token, like someone typing in real-time, making interactions more engaging.
 * **🔧 Simple Structure:** Focuses on core chatbot functionality, making it easy to understand and modify.
 
-## 🎬 Demo (Optional)
+## 🎬 Demo 
 
 *![Chatbot Demo GIF](./chatbot_demo.gif)*
 
