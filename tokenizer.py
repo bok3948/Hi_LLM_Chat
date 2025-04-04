@@ -30,6 +30,7 @@ class Tokenizer:
             special_tokens=self.special_tokens
         )
 
+
     def encode(self, text, bos=False, eos=False, allowed_special=set(), disallowed_special=(), return_tensors="no"):
         if bos:
             tokens = [self.special_tokens["<|begin_of_text|>"]]
@@ -49,4 +50,3 @@ class Tokenizer:
 
     def decode(self, tokens):
         return self.model.decode(tokens)
-        
