@@ -1,7 +1,7 @@
 # 💬 Hi_LLM_Chat: Your Local Multi-Turn Chatbot Powered by Llama 3.2 1B
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue.svg)](https://www.python.org/downloads/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) **Hi_LLM_Chat** is a simple yet powerful multi-turn chatbot that runs entirely on your local machine. It's built upon the **Llama 3.2 1B model** and aims for natural conversations with users. Experience real-time interaction with its **streaming text generation** feature! 🚀
+**Hi_LLM_Chat** is a simple yet powerful multi-turn chatbot that runs entirely on your local machine. It's built upon the **Llama 3.2 1B model** and aims for natural conversations with users. Experience real-time interaction with its **streaming text generation** feature! 🚀
 
 ## ✨ Key Features
 
