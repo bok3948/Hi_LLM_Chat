@@ -2,6 +2,51 @@
 import torch
 import logging
 
+class Llama3ChatFormatter(_ChatFormatter):
+    """Format a chat prompt using special tokens to demarcate roles and messages.
+
+    Refer to the LLaMA3 documentation for more details https://llama.meta.com/docs/model-cards-and-prompt-formats/meta-llama-3
+
+    """
+
+    def _encode_header(self, role) -> List[int]:
+        tokens = []
+        tokens.append(self.tokenizer.special_tokens["<|start_header_id|>"])
+        tokens.extend(self.tokenizer.encode(role, bos=False, eos=False))
+        tokens.append(self.tokenizer.special_tokens["<|end_header_id|>"])
+        tokens.extend(self.tokenizer.encode("\n\n", bos=False, eos=False))
+        return tokens
+
+    def _encode_message(self, message: _ChatFormatter.MESSAGE_TYPE) -> List[int]:
+        tokens = self._encode_header(message["role"])
+        if isinstance(message["content"], str):
+            tokens.extend(
+                self.tokenizer.encode(message["content"], bos=False, eos=False)
+            )
+        elif isinstance(message["content"], list):
+            for content in message["content"]:
+                if content["type"] == "text":
+                    tokens.extend(
+                        self.tokenizer.encode(content["text"], bos=False, eos=False)
+                    )
+
+        tokens.append(self.tokenizer.special_tokens["<|eot_id|>"])
+        return tokens
+
+    def encode_dialog_prompt(
+        self,
+        dialog: _ChatFormatter.DIALOG_TYPE,
+        add_generation_prompt: bool = True,
+    ) -> List[int]:
+        tokens = []
+        tokens.append(self.tokenizer.special_tokens["<|begin_of_text|>"])
+        for message in dialog:
+            tokens.extend(self._encode_message(message))
+        # Add the start of an assistant message for the model to complete.
+        if add_generation_prompt and dialog and dialog[-1]["role"] != "assistant":
+            tokens.extend(self._encode_header("assistant")) # Pass role directly as a string
+        return tokens
+
 class chatbot:
     def __init__(self, model, tokenizer, device):
         self.model = model
