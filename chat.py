@@ -263,19 +263,17 @@ class chatbot:
     def chat(
         self,
     ):
-        print("Starting Interactive Chat")
+        print("Starting Multi Turn Chat if you want to exit say /bye")
 
         start_pos = 0
         self.system_prompt = None
 
-        print(
-            f"Entering Chat Mode. Will continue chatting back and forth with the language model until the models max context length of {self.max_seq_len} tokens is hit or until the user says /bye"
-        )
+
         get_system_prompt = self.get_user_input(
-            "Do you want to enter a system prompt? Enter y for yes and anything else for no. \n"
+           "Do you want to enter a system prompt? Enter y for yes and anything else for no. \n"
         )
         if get_system_prompt == "y" or get_system_prompt == "Y":
-            self.system_prompt = self.get_user_input("What is your system prompt? \n")
+           self.system_prompt = self.get_user_input("What is your system prompt? \n")
 
         for i in range(1000):
             is_first_sample: bool = i == 0
