@@ -327,10 +327,4 @@ class chatbot:
                 if token_tensor is not None:
                     start_pos += token_tensor.size(0)
 
-if __name__ == "__main__":
-    model = torch.load("./model.pt", weights_only=False)
-    tokenizer = Tokenizer("./tokenizer.model")
-    chat_format = Llama3ChatFormatter(tokenizer)
-    model = model.to("cuda")
-    chat_bot = chatbot(model,  256, tokenizer, chat_format, device="cuda", generate_full_logit=True)
-    chat_bot.chat()
+
