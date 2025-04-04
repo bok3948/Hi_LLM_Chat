@@ -63,6 +63,8 @@ This section covers everything from setting up the environment to running the ch
     python chat.py # Or the actual name of your execution script
     ```
     # Example specifying model folder via command-line argument
+    '''bash
     python chat.py --model_folder_path ./llama3.2-1B-instruct/
+    '''
 
 ---
