@@ -26,7 +26,7 @@
 
 1.  **Clone the Repository:**
     ```bash
-    git clone [https://github.com/YourUsername/Hi_LLM_Chat.git](https://github.com/YourUsername/Hi_LLM_Chat.git)  # Change YourUsername to your actual GitHub username
+    git clone https://github.com/bok3948/Hi_LLM_Chat.git  # Change YourUsername to your actual GitHub username
     cd Hi_LLM_Chat
     ```
 
