@@ -2,6 +2,36 @@
 import torch
 import logging
 
+class _ChatFormatter(ABC):
+
+
+    MESSAGE_TYPE = Dict[str, Union[str, List[Dict[str, str]]]]
+
+    DIALOG_TYPE = List[MESSAGE_TYPE]
+
+    def __init__(self, tokenizer):
+        self.tokenizer = tokenizer
+
+    @abstractmethod
+    def encode_dialog_prompt(
+        self,
+        dialog: DIALOG_TYPE,
+        add_generation_prompt: bool = True,
+    ) -> List[int]:
+        """Encode a sequence of messages into a sequence of token IDs, including
+        the chat template
+
+        Args:
+            dialog (DIALOG_TYPE): The sequence of dialog messages to encode.
+                This will be the additional messages on top of those that have
+                already been processed.
+            add_generation_prompt (bool): Whether to include a generation prompt
+                at the end of the encoded sequence.
+
+        Returns:
+            List[int]: A list of token IDs representing the encoded prompt.
+        """
+
 class Llama3ChatFormatter(_ChatFormatter):
     """Format a chat prompt using special tokens to demarcate roles and messages.
 
