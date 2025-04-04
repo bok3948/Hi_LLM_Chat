@@ -31,12 +31,6 @@
 
 2.  **Download Model & Tokenizer:**
     * Obtain the Llama 3.2 1B (Instruct version recommended for chat) model weights and tokenizer from the official Meta channels (see Requirements).
-    * Create a directory within the project to store the model files (e.g., `./llama3.2-1B-instruct/`).
-    * Place all the downloaded model files (e.g., `consolidated.00.pth` or `.safetensors` files, `tokenizer.model`, `params.json`, or the relevant `.gguf` file if using llama.cpp) into the directory you created.
-    * **Important:** You might need to update the model path in the configuration file or script (`config.py`, `chat.py`, etc.) to point to this directory.
-    * 아, 죄송합니다! 제가 "도식"이라는 의미를 잘못 이해했네요. 설정 과정의 흐름도가 아니라, 설정을 완료했을 때 예상되는 프로젝트 폴더의 구조를 보여달라는 의미셨군요.
-
-README.md에 포함하기 좋은 형태로, 완성된 폴더 구조 예시를 텍스트로 표현해 드리겠습니다.
 
 Markdown
 
