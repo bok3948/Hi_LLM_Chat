@@ -78,11 +78,19 @@ class Llama3ChatFormatter(_ChatFormatter):
         return tokens
 
 class chatbot:
-    def __init__(self, model, tokenizer, device):
+    def __init__(self, model,  max_seq_len, tokenizer, chat_format, generate_full_logit, device):
         self.model = model
         self.tokenizer = tokenizer
         self.device = device
+        self.chat_formatter = chat_format
+        self.system_prompt = None
+        self.max_seq_len = max_seq_len
+        self.get_user_input: Callable = input
+        self.generate_full_logit = generate_full_logit
+        self.temperature = 0.0 
+        self.top_k = 0
 
+        self.eot_id = self.tokenizer.special_tokens["<|eot_id|>"]
     def sample(
         self,
         logits,
